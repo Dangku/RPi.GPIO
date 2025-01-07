@@ -96,9 +96,13 @@ int get_gpio_number(int channel, unsigned int *gpio)
         if (aml_found == 1)
             *gpio = *(*bcm_to_amlgpio+channel);
 #endif
-#ifdef SUNXI_SUPPORT
-        if (sunxi_found == 1)
-            *gpio = *(*bcm_to_sunxigpio+channel);
+#ifdef SUN50IW9_SUPPORT
+        if (sun50iw9_found == 1)
+            *gpio = *(*bcm_to_sun50iw9gpio+channel);
+#endif
+#ifdef SUN55IW3_SUPPORT
+        if (sun55iw3_found == 1)
+            *gpio = *(*bcm_to_sun55iw3gpio+channel);
 #endif
 #ifdef SPACEMIT_SUPPORT
         if (spacemit_found == 1)

@@ -580,10 +580,19 @@ static unsigned int chan_from_gpio(unsigned int gpio)
            return -1;
        }
 #endif
-#ifdef SUNXI_SUPPORT
-       if (strstr(rpiinfo.processor, "AW")) {
+#ifdef SUN50IW9_SUPPORT
+       if (strstr(rpiinfo.processor, "AW SUN50IW9")) {
            for (chan=1; chan<41; chan++) {
-               if (*(*bcm_to_sunxigpio+chan) == gpio)
+               if (*(*bcm_to_sun50iw9gpio+chan) == gpio)
+                   return chan;
+           }
+           return -1;
+       }
+#endif
+#ifdef SUN55IW3_SUPPORT
+       if (strstr(rpiinfo.processor, "AW SUN55IW3")) {
+           for (chan=1; chan<41; chan++) {
+               if (*(*bcm_to_sun55iw3gpio+chan) == gpio)
                    return chan;
            }
            return -1;
@@ -1055,8 +1064,10 @@ PyMODINIT_FUNC init_GPIO(void)
 
     if (strstr(rpiinfo.processor, "AML")) {
         setMappingPtrsAml();
-    } else if (strstr(rpiinfo.processor, "AW")) {
-        setMappingPtrsSunxi();
+    } else if (strstr(rpiinfo.processor, "AW SUN50IW9")) {
+        setMappingPtrsSun50iw9();
+    } else if (strstr(rpiinfo.processor, "AW SUN55IW3")) {
+        setMappingPtrsSun55iw3();
     } else if (strstr(rpiinfo.processor, "SPACEMIT")) {
 	setMappingPtrsSpacemit();
     } else {

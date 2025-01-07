@@ -55,10 +55,16 @@ int get_rpi_info(rpi_info *info)
           aml_found = found = 1;
       }
 #endif
-#ifdef SUNXI_SUPPORT
+#ifdef SUN50IW9_SUPPORT
       if (strstr(hardware, "BananaPi M4 Berry") ||
           strstr(hardware, "BananaPi M4 Zero"))  {
-          sunxi_found = found = 1;
+          sun50iw9_found = found = 1;
+      }
+#endif
+#ifdef SUN55IW3_SUPPORT
+      if (strstr(hardware, "BananaPi BPI-F5") ||
+          strstr(hardware, "Banana Pi F5"))  {
+          sun55iw3_found = found = 1;
       }
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -82,8 +88,11 @@ int get_rpi_info(rpi_info *info)
 #ifdef AML_SUPPORT
              aml_found = 0;
 #endif
-#ifdef SUNXI_SUPPORT
-             sunxi_found = 0;
+#ifdef SUN50IW9_SUPPORT
+             sun50iw9_found = 0;
+#endif
+#ifdef SUN55IW3_SUPPORT
+             sun55iw3_found = 0;
 #endif
 #ifdef SPACEMIT_SUPPORT
 	     spacemit_found = 0;
@@ -103,10 +112,15 @@ int get_rpi_info(rpi_info *info)
                 aml_found = found = 1;
             }
 #endif
-#ifdef SUNXI_SUPPORT
+#ifdef SUN50IW9_SUPPORT
 	    if (strstr(hardware, "BPI-M4Berry") ||
                 strstr(hardware, "BPI-M4Zero"))  {
-                sunxi_found = found = 1;
+                sun50iw9_found = found = 1;
+            }
+#endif
+#ifdef SUN55IW3_SUPPORT
+	    if (strstr(hardware, "BPI-F5"))  {
+                sun55iw3_found = found = 1;
             }
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -133,9 +147,16 @@ int get_rpi_info(rpi_info *info)
       return 0;
    }
 #endif
-#ifdef SUNXI_SUPPORT
-   if (sunxi_found) {
-      setInfoSunxi(hardware, (void *)info);
+#ifdef SUN50IW9_SUPPORT
+   if (sun50iw9_found) {
+      setInfoSun50iw9(hardware, (void *)info);
+      strcpy(info->revision, revision);
+      return 0;
+   }
+#endif
+#ifdef SUN55IW3_SUPPORT
+   if (sun55iw3_found) {
+      setInfoSun55iw3(hardware, (void *)info);
       strcpy(info->revision, revision);
       return 0;
    }

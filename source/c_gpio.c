@@ -87,12 +87,19 @@ int setup(void)
         return SETUP_OK;
     }
 #endif
-#ifdef SUNXI_SUPPORT
-    if(sunxi_found) {
-        wiringPiSetupSunxi();  //Will exit on fail
+#ifdef SUN50IW9_SUPPORT
+    if(sun50iw9_found) {
+        wiringPiSetupSun50iw9();  //Will exit on fail
         return SETUP_OK;
     }
 #endif
+#ifdef SUN55IW3_SUPPORT
+    if(sun55iw3_found) {
+        wiringPiSetupSun55iw3();  //Will exit on fail
+        return SETUP_OK;
+    }
+#endif
+
 #ifdef SPACEMIT_SUPPORT
     if(spacemit_found) {
         wiringPiSetupSpacemit();  //Will exit on fail
@@ -204,8 +211,12 @@ void clear_event_detect(int gpio)
     if (aml_found)
         return;
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -227,8 +238,12 @@ int eventdetected(int gpio)
     if (aml_found)
         return 0;
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return 0;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return 0;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -252,8 +267,12 @@ void set_rising_event(int gpio, int enable)
     if (aml_found)
         return;
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -277,8 +296,12 @@ void set_falling_event(int gpio, int enable)
     if (aml_found)
         return;
 #endif
-#ifdef SUNXI_SUPPORT 
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT 
+    if (sun50iw9_found)
+        return;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -304,8 +327,12 @@ void set_high_event(int gpio, int enable)
     if (aml_found)
         return;
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -329,8 +356,12 @@ void set_low_event(int gpio, int enable)
     if (aml_found)
         return;
 #endif
-#ifdef SUNXI_SUPPORT 
-    if (sunxi_found)
+#ifdef SUN50IW9_SUPPORT 
+    if (sun50iw9_found)
+        return;
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
         return;
 #endif
 #ifdef SPACEMIT_SUPPORT
@@ -356,9 +387,15 @@ void set_pullupdn(int gpio, int pud)
 	return;
     }
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found) {
-        pullUpDnControlSunxi(gpio, pud);
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found) {
+        pullUpDnControlSun50iw9(gpio, pud);
+	return;
+    }
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found) {
+        pullUpDnControlSun55iw3(gpio, pud);
 	return;
     }
 #endif
@@ -416,10 +453,17 @@ void setup_gpio(int gpio, int direction, int pud)
 	return;
     }
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found) {
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found) {
         set_pullupdn(gpio, pud);
-        pinModeSunxi (gpio, direction);
+        pinModeSun50iw9 (gpio, direction);
+	return;
+    }
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found) {
+        set_pullupdn(gpio, pud);
+        pinModeSun55iw3 (gpio, direction);
 	return;
     }
 #endif
@@ -448,9 +492,13 @@ int gpio_function(int gpio)
     if (aml_found)
         return pinGetModeAml(gpio);
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
-        return pinGetModeSunxi(gpio);
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return pinGetModeSun50iw9(gpio);
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
+        return pinGetModeSun55iw3(gpio);
 #endif
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
@@ -473,9 +521,15 @@ void output_gpio(int gpio, int value)
 	return;
     }
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found) {
-        digitalWriteSunxi(gpio, (value) ? HIGH : LOW);
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found) {
+        digitalWriteSun50iw9(gpio, (value) ? HIGH : LOW);
+	return;
+    }
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found) {
+        digitalWriteSun55iw3(gpio, (value) ? HIGH : LOW);
 	return;
     }
 #endif
@@ -503,9 +557,13 @@ int input_gpio(int gpio)
     if (aml_found)
         return digitalReadAml(gpio);
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found)
-        return digitalReadSunxi(gpio);
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found)
+        return digitalReadSun50iw9(gpio);
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found)
+        return digitalReadSun55iw3(gpio);
 #endif
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
@@ -528,9 +586,15 @@ void cleanup(void)
 	return;
     }
 #endif
-#ifdef SUNXI_SUPPORT
-    if (sunxi_found) {
-        wiringPiCleanupSunxi();
+#ifdef SUN50IW9_SUPPORT
+    if (sun50iw9_found) {
+        wiringPiCleanupSun50iw9();
+	return;
+    }
+#endif
+#ifdef SUN55IW3_SUPPORT
+    if (sun55iw3_found) {
+        wiringPiCleanupSun55iw3();
 	return;
     }
 #endif
