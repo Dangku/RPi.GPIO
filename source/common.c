@@ -27,6 +27,7 @@ SOFTWARE.
 #include "bpi_aml.h"
 #include "bpi_spacemit.h"
 #include "bpi_sunxi.h"
+#include "bpi_renesas.h"
 
 int gpio_mode = MODE_UNKNOWN;
 const int pin_to_gpio_rev1[41] = {-1, -1, -1, 0, -1, 1, -1, 4, 14, -1, 15, 17, 18, 21, -1, 22, 23, -1, 24, 10, -1, 9, 25, 11, 8, -1, 7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -110,6 +111,10 @@ int get_gpio_number(int channel, unsigned int *gpio)
 #ifdef SPACEMIT_SUPPORT
         if (spacemit_found == 1)
             *gpio = *(*bcm_to_spacemitgpio+channel);
+#endif
+#ifdef RZV2N_SUPPORT
+        if (rzv2n_found == 1)
+            *gpio = *(*bcm_to_rzv2ngpio+channel);
 #endif
     }
 

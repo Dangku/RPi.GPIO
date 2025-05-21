@@ -31,6 +31,7 @@ SOFTWARE.
 #include "bpi_aml.h"
 #include "bpi_spacemit.h"
 #include "bpi_sunxi.h"
+#include "bpi_renesas.h"
 
 static PyObject *rpi_revision; // deprecated
 static PyObject *board_info;
@@ -610,6 +611,15 @@ static unsigned int chan_from_gpio(unsigned int gpio)
            return -1;
        }
 #endif
+#ifdef RZV2N_SUPPORT
+       if (strstr(rpiinfo.processor, "Renesas RZV2N")) {
+           for (chan=1; chan<41; chan++) {
+               if (*(*bcm_to_rzv2ngpio+chan) == gpio)
+                   return chan;
+           }
+           return -1;
+       }
+#endif
 
        return gpio;
     }
@@ -1073,6 +1083,8 @@ PyMODINIT_FUNC init_GPIO(void)
         setMappingPtrsSun55iw3();
     } else if (strstr(rpiinfo.processor, "SPACEMIT")) {
 	setMappingPtrsSpacemit();
+    } else if (strstr(rpiinfo.processor, "Renesas RZV2N")) {
+        setMappingPtrsRzv2n();
     } else {
         if (rpiinfo.p1_revision == 1) {
             pin_to_gpio = &pin_to_gpio_rev1;

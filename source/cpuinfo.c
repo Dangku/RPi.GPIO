@@ -34,6 +34,7 @@ SOFTWARE.
 #include "bpi_aml.h"
 #include "bpi_spacemit.h"
 #include "bpi_sunxi.h"
+#include "bpi_renesas.h"
 
 int get_rpi_info(rpi_info *info)
 {
@@ -76,6 +77,12 @@ int get_rpi_info(rpi_info *info)
           spacemit_found = found = 1;
       }
 #endif
+#ifdef RZV2N_SUPPORT
+      if (strstr(hardware, "BananaPi BPI-AI2N") ||
+          strstr(hardware, "Banana Pi BPI-AI2N")) {
+          rzv2n_found = found = 1;
+      }
+#endif
    }
 
    if ((fp = fopen("/proc/cpuinfo", "r"))) {
@@ -99,6 +106,9 @@ int get_rpi_info(rpi_info *info)
 #endif
 #ifdef SPACEMIT_SUPPORT
 	     spacemit_found = 0;
+#endif
+#ifdef RZV2N_SUPPORT
+             rzv2n_found = 0;
 #endif
         }
         else {  //Check for Bananapi 
@@ -130,6 +140,11 @@ int get_rpi_info(rpi_info *info)
             if (strstr(hardware, "BPI-F3") ||
 	        strstr(hardware, "k1-x deb1"))  {
                 spacemit_found = found = 1;
+            }
+#endif
+#ifdef RZV2N_SUPPORT
+            if (strstr(hardware, "BPI-AI2N"))  {
+                rzv2n_found = found = 1;
             }
 #endif
         }
@@ -167,6 +182,13 @@ int get_rpi_info(rpi_info *info)
 #ifdef SPACEMIT_SUPPORT
    if (spacemit_found) {
       setInfoSpacemit(hardware, (void *)info);
+      strcpy(info->revision, revision);
+      return 0;
+   }
+#endif
+#ifdef RZV2N_SUPPORT
+   if (rzv2n_found) {
+      setInfoRzv2n(hardware, (void *)info);
       strcpy(info->revision, revision);
       return 0;
    }

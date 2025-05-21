@@ -23,11 +23,14 @@
 #define	PI_MODEL_BANANAPIM4ZERO                          13
 #define	PI_MODEL_BANANAPIF3                                      14
 #define	PI_MODEL_BANANAPIF5                                      15
+#define     PI_MODEL_BANANAPIAI2N                                 16
 
 #define AML_SUPPORT
 #define SUN50IW9_SUPPORT
 #define SUN55IW3_SUPPORT
 #define SPACEMIT_SUPPORT
+#define RZV2N_SUPPORT
+#define RZV2H_SUPPORT
 
 #define INPUT  1 // is really 0 for control register!
 #define OUTPUT 0 // is really 1 for control register!
@@ -59,10 +62,6 @@
 #define MAXPINCOUNT	40
 
 extern const int (*pin_to_gpio)[MAXPINCOUNT+1];
-
-//#include "bpi_sunxi.h"
-//#include "bpi_aml.h"
-//#include "bpi_spacemit.h"
 
 #ifdef DEFINE_BANANAPI_VARS
 static int piModel;

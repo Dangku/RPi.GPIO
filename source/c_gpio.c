@@ -31,6 +31,7 @@ SOFTWARE.
 #include "bpi_aml.h"
 #include "bpi_spacemit.h"
 #include "bpi_sunxi.h"
+#include "bpi_renesas.h"
 
 #define BCM2708_PERI_BASE_DEFAULT   0x20000000
 #define BCM2709_PERI_BASE_DEFAULT   0x3f000000
@@ -102,12 +103,17 @@ int setup(void)
         return SETUP_OK;
     }
 #endif
-
 #ifdef SPACEMIT_SUPPORT
     if(spacemit_found) {
         wiringPiSetupSpacemit();  //Will exit on fail
         return SETUP_OK;
     }
+#endif
+#ifdef RZV2N_SUPPORT
+    if(rzv2n_found) {
+        wiringPiSetupRzv2n();  //Will exit on fail
+        return SETUP_OK;
+}
 #endif
 
     // try /dev/gpiomem first - this does not require root privs
@@ -226,6 +232,10 @@ void clear_event_detect(int gpio)
     if (spacemit_found)
         return;
 #endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
+        return;
+#endif
 
     int offset = EVENT_DETECT_OFFSET + (gpio/32);
     int shift = (gpio%32);
@@ -251,6 +261,10 @@ int eventdetected(int gpio)
 #endif
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
+        return 0;
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
         return 0;
 #endif
 
@@ -282,6 +296,10 @@ void set_rising_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
+        return;
+#endif
 
     int offset = RISING_ED_OFFSET + (gpio/32);
     int shift = (gpio%32);
@@ -309,6 +327,10 @@ void set_falling_event(int gpio, int enable)
 #endif
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
+        return;
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
         return;
 #endif
 
@@ -342,6 +364,10 @@ void set_high_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
+        return;
+#endif
 
     int offset = HIGH_DETECT_OFFSET + (gpio/32);
     int shift = (gpio%32);
@@ -369,6 +395,10 @@ void set_low_event(int gpio, int enable)
 #endif
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
+        return;
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
         return;
 #endif
 
@@ -405,6 +435,12 @@ void set_pullupdn(int gpio, int pud)
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found) {
         pullUpDnControlSpacemit(gpio, pud);
+        return;
+    }
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found) {
+        pullUpDnControlRzv2n(gpio, pud);
         return;
     }
 #endif
@@ -477,6 +513,13 @@ void setup_gpio(int gpio, int direction, int pud)
         return;
     }
 #endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found) {
+        set_pullupdn(gpio, pud);
+        pinModeRzv2n (gpio, direction);
+        return;
+    }
+#endif
 
     int offset = FSEL_OFFSET + (gpio/10);
     int shift = (gpio%10)*3;
@@ -506,6 +549,10 @@ int gpio_function(int gpio)
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
         return pinGetModeSpacemit(gpio);
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
+        return pinGetModeRzv2n(gpio);
 #endif
 
     int offset = FSEL_OFFSET + (gpio/10);
@@ -542,6 +589,12 @@ void output_gpio(int gpio, int value)
         return;
     }
 #endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found) {
+        digitalWriteRzv2n(gpio, (value) ? HIGH : LOW);
+        return;
+    }
+#endif
 
     int offset, shift;
 
@@ -571,6 +624,10 @@ int input_gpio(int gpio)
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found)
         return digitalReadSpacemit(gpio);
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found)
+        return digitalReadRzv2n(gpio);
 #endif
 
     int offset, value, mask;
@@ -604,6 +661,12 @@ void cleanup(void)
 #ifdef SPACEMIT_SUPPORT
     if (spacemit_found) {
         wiringPiCleanupSpacemit();
+        return;
+    }
+#endif
+#ifdef RZV2N_SUPPORT
+    if (rzv2n_found) {
+        wiringPiCleanupRzv2n();
         return;
     }
 #endif
