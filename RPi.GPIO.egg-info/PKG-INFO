@@ -7,6 +7,7 @@ Author: Ben Croston
 Author-email: ben@croston.org
 License: MIT
 Keywords: Raspberry Pi GPIO
+Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Operating System :: POSIX :: Linux
 Classifier: License :: OSI Approved :: MIT License
@@ -257,4 +258,6 @@ Change Log
 0.0.1a
 ------
 - First version.  Completely untested until I can get hold of a Raspberry Pi!
+
+
 

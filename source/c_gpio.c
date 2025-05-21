@@ -28,6 +28,9 @@ SOFTWARE.
 #include <string.h>
 #include "c_gpio.h"
 #include "bananapi.h"
+#include "bpi_aml.h"
+#include "bpi_spacemit.h"
+#include "bpi_sunxi.h"
 
 #define BCM2708_PERI_BASE_DEFAULT   0x20000000
 #define BCM2709_PERI_BASE_DEFAULT   0x3f000000

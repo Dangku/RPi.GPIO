@@ -31,6 +31,9 @@ SOFTWARE.
 #include <arpa/inet.h>
 #include "cpuinfo.h"
 #include "bananapi.h"
+#include "bpi_aml.h"
+#include "bpi_spacemit.h"
+#include "bpi_sunxi.h"
 
 int get_rpi_info(rpi_info *info)
 {

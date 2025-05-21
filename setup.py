@@ -44,4 +44,4 @@ setup(name             = 'RPi.GPIO',
       url              = 'http://github.com/Dangku/RPi.GPIO',
       classifiers      = classifiers,
       packages         = ['RPi','RPi.GPIO'],
-      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/bananapi.c'])])
+      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/bpi_sunxi.c', 'source/bpi_aml.c', 'source/bpi_spacemit.c'])])

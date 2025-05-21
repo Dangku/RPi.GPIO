@@ -14,6 +14,12 @@ RPi.GPIO.egg-info/top_level.txt
 RPi/GPIO/__init__.py
 source/bananapi.c
 source/bananapi.h
+source/bpi_aml.c
+source/bpi_aml.h
+source/bpi_spacemit.c
+source/bpi_spacemit.h
+source/bpi_sunxi.c
+source/bpi_sunxi.h
 source/c_gpio.c
 source/c_gpio.h
 source/common.c

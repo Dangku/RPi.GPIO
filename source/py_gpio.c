@@ -28,6 +28,9 @@ SOFTWARE.
 #include "constants.h"
 #include "common.h"
 #include "bananapi.h"
+#include "bpi_aml.h"
+#include "bpi_spacemit.h"
+#include "bpi_sunxi.h"
 
 static PyObject *rpi_revision; // deprecated
 static PyObject *board_info;
