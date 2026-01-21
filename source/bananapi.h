@@ -23,14 +23,14 @@
 #define	PI_MODEL_BANANAPIM4ZERO                          13
 #define	PI_MODEL_BANANAPIF3                                      14
 #define	PI_MODEL_BANANAPIF5                                      15
-#define     PI_MODEL_BANANAPIAI2N                                 16
+#define	PI_MODEL_BANANAPIAI2N                                 16
+#define	PI_MODEL_BANANAPIAI2H                                 17
 
 #define AML_SUPPORT
 #define SUN50IW9_SUPPORT
 #define SUN55IW3_SUPPORT
 #define SPACEMIT_SUPPORT
-#define RZV2N_SUPPORT
-#define RZV2H_SUPPORT
+#define RZV2HN_SUPPORT
 
 #define INPUT  1 // is really 0 for control register!
 #define OUTPUT 0 // is really 1 for control register!

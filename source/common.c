@@ -112,9 +112,9 @@ int get_gpio_number(int channel, unsigned int *gpio)
         if (spacemit_found == 1)
             *gpio = *(*bcm_to_spacemitgpio+channel);
 #endif
-#ifdef RZV2N_SUPPORT
-        if (rzv2n_found == 1)
-            *gpio = *(*bcm_to_rzv2ngpio+channel);
+#ifdef RZV2HN_SUPPORT
+        if (rzv2hn_found == 1)
+            *gpio = *(*bcm_to_rzv2hngpio+channel);
 #endif
     }
 

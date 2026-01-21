@@ -109,9 +109,9 @@ int setup(void)
         return SETUP_OK;
     }
 #endif
-#ifdef RZV2N_SUPPORT
-    if(rzv2n_found) {
-        wiringPiSetupRzv2n();  //Will exit on fail
+#ifdef RZV2HN_SUPPORT
+    if(rzv2hn_found) {
+        wiringPiSetupRzv2hn();  //Will exit on fail
         return SETUP_OK;
 }
 #endif
@@ -232,8 +232,8 @@ void clear_event_detect(int gpio)
     if (spacemit_found)
         return;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return;
 #endif
 
@@ -263,8 +263,8 @@ int eventdetected(int gpio)
     if (spacemit_found)
         return 0;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return 0;
 #endif
 
@@ -296,8 +296,8 @@ void set_rising_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return;
 #endif
 
@@ -329,8 +329,8 @@ void set_falling_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return;
 #endif
 
@@ -364,8 +364,8 @@ void set_high_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return;
 #endif
 
@@ -397,8 +397,8 @@ void set_low_event(int gpio, int enable)
     if (spacemit_found)
         return;
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
         return;
 #endif
 
@@ -438,9 +438,9 @@ void set_pullupdn(int gpio, int pud)
         return;
     }
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found) {
-        pullUpDnControlRzv2n(gpio, pud);
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found) {
+        pullUpDnControlRzv2hn(gpio, pud);
         return;
     }
 #endif
@@ -513,10 +513,10 @@ void setup_gpio(int gpio, int direction, int pud)
         return;
     }
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found) {
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found) {
         set_pullupdn(gpio, pud);
-        pinModeRzv2n (gpio, direction);
+        pinModeRzv2hn (gpio, direction);
         return;
     }
 #endif
@@ -550,9 +550,9 @@ int gpio_function(int gpio)
     if (spacemit_found)
         return pinGetModeSpacemit(gpio);
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
-        return pinGetModeRzv2n(gpio);
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
+        return pinGetModeRzv2hn(gpio);
 #endif
 
     int offset = FSEL_OFFSET + (gpio/10);
@@ -589,9 +589,9 @@ void output_gpio(int gpio, int value)
         return;
     }
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found) {
-        digitalWriteRzv2n(gpio, (value) ? HIGH : LOW);
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found) {
+        digitalWriteRzv2hn(gpio, (value) ? HIGH : LOW);
         return;
     }
 #endif
@@ -625,9 +625,9 @@ int input_gpio(int gpio)
     if (spacemit_found)
         return digitalReadSpacemit(gpio);
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found)
-        return digitalReadRzv2n(gpio);
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found)
+        return digitalReadRzv2hn(gpio);
 #endif
 
     int offset, value, mask;
@@ -664,9 +664,9 @@ void cleanup(void)
         return;
     }
 #endif
-#ifdef RZV2N_SUPPORT
-    if (rzv2n_found) {
-        wiringPiCleanupRzv2n();
+#ifdef RZV2HN_SUPPORT
+    if (rzv2hn_found) {
+        wiringPiCleanupRzv2hn();
         return;
     }
 #endif

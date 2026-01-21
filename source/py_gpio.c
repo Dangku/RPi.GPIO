@@ -611,10 +611,11 @@ static unsigned int chan_from_gpio(unsigned int gpio)
            return -1;
        }
 #endif
-#ifdef RZV2N_SUPPORT
-       if (strstr(rpiinfo.processor, "Renesas RZV2N")) {
+#ifdef RZV2HN_SUPPORT
+       if (strstr(rpiinfo.processor, "Renesas RZV2N") ||
+	   strstr(rpiinfo.processor, "Renesas RZV2H")) {
            for (chan=1; chan<41; chan++) {
-               if (*(*bcm_to_rzv2ngpio+chan) == gpio)
+               if (*(*bcm_to_rzv2hngpio+chan) == gpio)
                    return chan;
            }
            return -1;
@@ -1083,8 +1084,9 @@ PyMODINIT_FUNC init_GPIO(void)
         setMappingPtrsSun55iw3();
     } else if (strstr(rpiinfo.processor, "SPACEMIT")) {
 	setMappingPtrsSpacemit();
-    } else if (strstr(rpiinfo.processor, "Renesas RZV2N")) {
-        setMappingPtrsRzv2n();
+    } else if (strstr(rpiinfo.processor, "Renesas RZV2N") ||
+    		  strstr(rpiinfo.processor, "Renesas RZV2H")) {
+        setMappingPtrsRzv2hn();
     } else {
         if (rpiinfo.p1_revision == 1) {
             pin_to_gpio = &pin_to_gpio_rev1;

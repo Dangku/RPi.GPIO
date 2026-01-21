@@ -20,14 +20,14 @@
 
 /* =======================================================================================
  *
- * Rzv2n specific
+ * Rzv2hn specific
  *
  * ========================================================================================
  */
-#ifdef RZV2N_SUPPORT
-static volatile uint32_t *rzv2n_gpio;
+#ifdef RZV2HN_SUPPORT
+static volatile uint32_t *rzv2hn_gpio;
 
-int wiringPiSetupRzv2n (void)
+int wiringPiSetupRzv2hn (void)
 {
     int fd;
 
@@ -35,30 +35,30 @@ int wiringPiSetupRzv2n (void)
     if (access("/dev/gpiomem", 0) == 0)
     {
         if ((fd = open("/dev/gpiomem", O_RDWR | O_SYNC | O_CLOEXEC)) < 0)
-            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2n: Unable to open /dev/gpiomem: %s\n", strerror(errno));
+            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2hn: Unable to open /dev/gpiomem: %s\n", strerror(errno));
     }
     else
     {
         if (geteuid() != 0)
-            (void)wiringPiFailure(WPI_FATAL, "wiringPiSetupRzv2n: Must be root. (Did you forget sudo?)\n");
+            (void)wiringPiFailure(WPI_FATAL, "wiringPiSetupRzv2hn: Must be root. (Did you forget sudo?)\n");
 
         if ((fd = open("/dev/mem", O_RDWR | O_SYNC | O_CLOEXEC)) < 0)
-            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2n: Unable to open /dev/mem: %s\n", strerror(errno));
+            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2hn: Unable to open /dev/mem: %s\n", strerror(errno));
     }
 
 
-    if (piModel == PI_MODEL_BANANAPIAI2N) {
-        rzv2n_gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, RZV2N_GPIO_BASE);
-        if (rzv2n_gpio == MAP_FAILED)
-            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2n: mmap (GPIO) failed: %s\n", strerror(errno));
+    if (piModel == PI_MODEL_BANANAPIAI2N || piModel == PI_MODEL_BANANAPIAI2H) {
+        rzv2hn_gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, RZV2HN_GPIO_BASE);
+        if (rzv2hn_gpio == MAP_FAILED)
+            return wiringPiFailure(WPI_ALMOST, "wiringPiSetupRzv2hn: mmap (GPIO) failed: %s\n", strerror(errno));
     }
 
     return 0;
 }
 
-void wiringPiCleanupRzv2n (void)
+void wiringPiCleanupRzv2hn (void)
 {
-    munmap((void *)rzv2n_gpio, BLOCK_SIZE);
+    munmap((void *)rzv2hn_gpio, BLOCK_SIZE);
 }
 
 /*
@@ -66,7 +66,7 @@ void wiringPiCleanupRzv2n (void)
  *********************************************************************************
  */
 
-void pinModeRzv2n (int pin, int mode)
+void pinModeRzv2hn (int pin, int mode)
 {
     int port, bit, offset;
     int pmc_shift, pm_shift;
@@ -94,15 +94,15 @@ void pinModeRzv2n (int pin, int mode)
 
     if (mode == INPUT)
     {
-        *(rzv2n_gpio + pmc_mmap_seek) &= ~((0x1 << bit) << pmc_shift);
-        *(rzv2n_gpio + pm_mmap_seek) &= ~((0x3 << (bit *2)) << pm_shift);
-        *(rzv2n_gpio + pm_mmap_seek) |= ((PM_INPUT << (bit *2)) << pm_shift); 
+        *(rzv2hn_gpio + pmc_mmap_seek) &= ~((0x1 << bit) << pmc_shift);
+        *(rzv2hn_gpio + pm_mmap_seek) &= ~((0x3 << (bit *2)) << pm_shift);
+        *(rzv2hn_gpio + pm_mmap_seek) |= ((PM_INPUT << (bit *2)) << pm_shift); 
     }
     else if (mode == OUTPUT)
     {
-        *(rzv2n_gpio + pmc_mmap_seek) &= ~((0x1 << bit) << pmc_shift);
-        *(rzv2n_gpio + pm_mmap_seek) &= ~((0x3 << (bit *2)) << pm_shift);
-        *(rzv2n_gpio + pm_mmap_seek) |= ((PM_OUTPUT << (bit *2)) << pm_shift); 
+        *(rzv2hn_gpio + pmc_mmap_seek) &= ~((0x1 << bit) << pmc_shift);
+        *(rzv2hn_gpio + pm_mmap_seek) &= ~((0x3 << (bit *2)) << pm_shift);
+        *(rzv2hn_gpio + pm_mmap_seek) |= ((PM_OUTPUT << (bit *2)) << pm_shift); 
     }
 }
 
@@ -115,7 +115,7 @@ void pinModeRzv2n (int pin, int mode)
  *********************************************************************************
  */
 
-void pullUpDnControlRzv2n (int pin, int pud)
+void pullUpDnControlRzv2hn (int pin, int pud)
 {
     int offset, port, port_offset, bit;
     uint32_t pupd_phyaddr, pupd_mmap_seek;
@@ -154,8 +154,8 @@ void pullUpDnControlRzv2n (int pin, int pud)
         break;
     }
 
-    reg = *(rzv2n_gpio + pupd_mmap_seek) &= ~(3 << (bit * 8));
-    *(rzv2n_gpio + pupd_mmap_seek) = reg | (bit_value << (bit * 8));
+    reg = *(rzv2hn_gpio + pupd_mmap_seek) &= ~(3 << (bit * 8));
+    *(rzv2hn_gpio + pupd_mmap_seek) = reg | (bit_value << (bit * 8));
 }
 
 /*
@@ -163,7 +163,7 @@ void pullUpDnControlRzv2n (int pin, int pud)
  *********************************************************************************
  */
 
-int digitalReadRzv2n (int pin)
+int digitalReadRzv2hn (int pin)
 {
     int port, bit, offset;
     int pm_shift, p_shift, pin_shift;
@@ -191,13 +191,13 @@ int digitalReadRzv2n (int pin)
     pin_mmap_seek = pin_phyaddr >> 2;
     pin_shift = (pin_phyaddr % 4) * 8;
 
-    gpiomode = *(rzv2n_gpio + pm_mmap_seek) >> pm_shift ;
+    gpiomode = *(rzv2hn_gpio + pm_mmap_seek) >> pm_shift ;
     gpiomode = (gpiomode >> (bit * 2)) & 0x3;
 
     if (gpiomode == PM_INPUT) {
-        return !!((*(rzv2n_gpio + pin_mmap_seek) >> pin_shift) & (1 <<bit));
+        return !!((*(rzv2hn_gpio + pin_mmap_seek) >> pin_shift) & (1 <<bit));
     } else if (gpiomode == PM_OUTPUT) {
-        return !!((*(rzv2n_gpio + p_mmap_seek) >> p_shift) & (1 <<bit));
+        return !!((*(rzv2hn_gpio + p_mmap_seek) >> p_shift) & (1 <<bit));
     }
 
     return 0;  //high-z
@@ -208,7 +208,7 @@ int digitalReadRzv2n (int pin)
  *********************************************************************************
  */
 
-void digitalWriteRzv2n (int pin, int value)
+void digitalWriteRzv2hn (int pin, int value)
 {
     int port, bit, offset;
     int p_shift;
@@ -224,9 +224,9 @@ void digitalWriteRzv2n (int pin, int value)
     p_shift = (p_phyaddr % 4) * 8;
 
     if (value == LOW)
-        *(rzv2n_gpio + p_mmap_seek) &= ~((1 << bit) << p_shift);
+        *(rzv2hn_gpio + p_mmap_seek) &= ~((1 << bit) << p_shift);
     else
-        *(rzv2n_gpio + p_mmap_seek) |= ((1 << bit) << p_shift);
+        *(rzv2hn_gpio + p_mmap_seek) |= ((1 << bit) << p_shift);
 }
 
 /*
@@ -236,9 +236,9 @@ void digitalWriteRzv2n (int pin, int value)
  *********************************************************************************
  */
 
-int analogReadRzv2n (int pin)
+int analogReadRzv2hn (int pin)
 {
-    wiringPiFailure(WPI_FATAL, "analogReadRzv2n: No ADC pin on Bananapi\n");
+    wiringPiFailure(WPI_FATAL, "analogReadRzv2hn: No ADC pin on Bananapi\n");
     return 0;
 }
 
@@ -249,9 +249,9 @@ int analogReadRzv2n (int pin)
  *********************************************************************************
  */
 
-void analogWriteRzv2n (int pin, int value)
+void analogWriteRzv2hn (int pin, int value)
 {
-    wiringPiFailure(WPI_FATAL, "analogWriteRzv2n: No DAC pin on Bananapi\n");
+    wiringPiFailure(WPI_FATAL, "analogWriteRzv2hn: No DAC pin on Bananapi\n");
 }
 
 /*
@@ -259,7 +259,7 @@ void analogWriteRzv2n (int pin, int value)
  *********************************************************************************
  */
 
-int pinGetModeRzv2n (int pin)
+int pinGetModeRzv2hn (int pin)
 {
     int port, bit, offset;
     int pmc_shift, pm_shift;
@@ -287,11 +287,11 @@ int pinGetModeRzv2n (int pin)
     pm_mmap_seek = pm_phyaddr >> 2;
     pm_shift = (pm_phyaddr % 4) * 8;
 
-    mode = (*(rzv2n_gpio + pmc_mmap_seek) >> pmc_shift) & (1<< bit);
+    mode = (*(rzv2hn_gpio + pmc_mmap_seek) >> pmc_shift) & (1<< bit);
     if (!mode)
     {
         //gpio mode, 0->hi-z, 1->input, 2->output
-        gpiomode = *(rzv2n_gpio + pm_mmap_seek) >> pm_shift;
+        gpiomode = *(rzv2hn_gpio + pm_mmap_seek) >> pm_shift;
         gpiomode = (gpiomode >> (bit * 2)) & 0x3;
         if (gpiomode == PM_OUTPUT)
             return OUTPUT;
@@ -302,7 +302,7 @@ int pinGetModeRzv2n (int pin)
     return INPUT;
 }
 
-void setInfoRzv2n(char *hardware, void *vinfo)
+void setInfoRzv2hn(char *hardware, void *vinfo)
 {
    rpi_info *info = (rpi_info *)vinfo;
 
@@ -315,19 +315,28 @@ void setInfoRzv2n(char *hardware, void *vinfo)
        info->ram = "8192M";
        info->manufacturer = "Bananapi";
        info->processor = "Renesas RZV2N";
+   } else if (strstr(hardware, "BPI-AI2H") ||
+                   strstr(hardware, "BananaPi AI2H"))
+   {
+       piModel = PI_MODEL_BANANAPIAI2H;
+       info->type = "BPI-AI2H";
+       info->p1_revision = 3;
+       info->ram = "8192M";
+       info->manufacturer = "Bananapi";
+       info->processor = "Renesas RZV2H";
    }
    else
-       wiringPiFailure(WPI_FATAL, "setInfoRzv2n: This code should only be called for Bananapi\n");
+       wiringPiFailure(WPI_FATAL, "setInfoRzv2hn: This code should only be called for Bananapi\n");
    
     return;
 }
 
-void setMappingPtrsRzv2n(void)
+void setMappingPtrsRzv2hn(void)
 {
-    if (piModel == PI_MODEL_BANANAPIAI2N)
+    if (piModel == PI_MODEL_BANANAPIAI2N || piModel == PI_MODEL_BANANAPIAI2H)
     {
-        pin_to_gpio = (const int(*)[41]) & physToGpioBananapiAI2N;
-        bcm_to_rzv2ngpio = &bcmToOGpioBananapiAI2N;
+        pin_to_gpio = (const int(*)[41]) & physToGpioBananapiAI2HN;
+        bcm_to_rzv2hngpio = &bcmToOGpioBananapiAI2HN;
     }
 }
-#endif /* end RZV2N_SUPPORT */
+#endif /* end RZV2HN_SUPPORT */

@@ -9,19 +9,19 @@
 
 /* =======================================================================================
  *
- * Rzv2n specific
+ * Rzv2hn specific
  *
  * ========================================================================================
  */
-#ifdef RZV2N_SUPPORT
+#ifdef RZV2HN_SUPPORT
 
-#define RZV2N_GPIO_BASE			  0x10410000
-#define RZV2N_GPIO_PIN_BASE		  416
+#define RZV2HN_GPIO_BASE			  0x10410000
+#define RZV2HN_GPIO_PIN_BASE		  416
 
 #define PINS_PER_PORT                     8
 #define EXTENDED_REG_OFFSET               0x10
 
-#define OFFSET(pin)                       (pin - RZV2N_GPIO_PIN_BASE)
+#define OFFSET(pin)                       (pin - RZV2HN_GPIO_PIN_BASE)
 
 #define PIN_ID_TO_PORT(n)                 (n / PINS_PER_PORT)     //port, bank, n=offset
 #define PIN_ID_TO_PORT_OFFSET(n)          (PIN_ID_TO_PORT(n) + EXTENDED_REG_OFFSET)  //port reg offset
@@ -48,14 +48,14 @@
 #define BLOCK_SIZE                        0x2000
 
 /* Non-static add extern definition below */
-int rzv2n_found;
-const int (*bcm_to_rzv2ngpio)[64];
+int rzv2hn_found;
+const int (*bcm_to_rzv2hngpio)[64];
 
 //
 // pinToGpio:
 //	Take a Wiring pin (0 through X) and re-map it to the AML_GPIO pin
 //
-static const int pinToGpioBananapiAI2N[64] = {
+static const int pinToGpioBananapiAI2HN[64] = {
 	// wiringPi number to native gpio number
 	488, 426,	//  0 |  1 : P90, P12
 	489, 490,	//  2 |  3 : P91, P92
@@ -78,7 +78,7 @@ static const int pinToGpioBananapiAI2N[64] = {
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	// 48...63
 };
 
-const int bcmToOGpioBananapiAI2N[64] = {	// BCM ModE
+const int bcmToOGpioBananapiAI2HN[64] = {	// BCM ModE
       -1,   -1, 442, 443, 484, 491, 493, 502, // 0..7
     503, 507, 508, 509, 456, 458, 460, 461, // 8..15
     457, 488, 426, 427, 429, 420, 490, 463, // 16..23
@@ -90,7 +90,7 @@ const int bcmToOGpioBananapiAI2N[64] = {	// BCM ModE
      -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1  // 56..63
 };
 
-static const int physToGpioBananapiAI2N[64] = {
+static const int physToGpioBananapiAI2HN[64] = {
 	// physical header pin number to native gpio number
 	  -1,		//  0
 	  -1,  -1,	//  1 |  2 : 3.3V, 5.0V
@@ -119,35 +119,35 @@ static const int physToGpioBananapiAI2N[64] = {
 	-1, -1, -1, -1, -1, -1, -1	// 57...63
 };
 
-#endif /* RZV2N_SUPPORT */
+#endif /* RZV2HN_SUPPORT */
 
 #else  /* DEFINE_BANANAPI_VARS */
 
 /* =======================================================================================
  *
- * rzv2n specific
+ * rzv2hn specific
  *
  * ========================================================================================
  */
-#ifdef RZV2N_SUPPORT
-extern int rzv2n_found;
-extern const int (*bcm_to_rzv2ngpio)[64];
+#ifdef RZV2HN_SUPPORT
+extern int rzv2hn_found;
+extern const int (*bcm_to_rzv2hngpio)[64];
 
-extern const int physToGpioBananapiAI2N[64];
-extern const int bcmToOGpioBananapiAI2N[64];
+extern const int physToGpioBananapiAI2HN[64];
+extern const int bcmToOGpioBananapiAI2HN[64];
 
-int wiringPiSetupRzv2n (void);
-void wiringPiCleanupRzv2n (void);
-void pinModeRzv2n (int pin, int mode);
-void pullUpDnControlRzv2n (int pin, int pud);
-int digitalReadRzv2n (int pin);
-void digitalWriteRzv2n (int pin, int value);
-int analogReadRzv2n (int pin);
-void analogWriteRzv2n (int pin, int value);
-int pinGetModeRzv2n (int pin);
-void setInfoRzv2n(char *hardware, void *vinfo);
-void setMappingPtrsRzv2n(void);
-#endif /* RZV2N_SUPPORT */
+int wiringPiSetupRzv2hn (void);
+void wiringPiCleanupRzv2hn (void);
+void pinModeRzv2hn (int pin, int mode);
+void pullUpDnControlRzv2hn (int pin, int pud);
+int digitalReadRzv2hn (int pin);
+void digitalWriteRzv2hn (int pin, int value);
+int analogReadRzv2hn (int pin);
+void analogWriteRzv2hn (int pin, int value);
+int pinGetModeRzv2hn (int pin);
+void setInfoRzv2hn(char *hardware, void *vinfo);
+void setMappingPtrsRzv2hn(void);
+#endif /* RZV2HN_SUPPORT */
 
 #endif /* DEFINE_BANANAPI_VARS */
 

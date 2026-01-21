@@ -77,10 +77,12 @@ int get_rpi_info(rpi_info *info)
           spacemit_found = found = 1;
       }
 #endif
-#ifdef RZV2N_SUPPORT
+#ifdef RZV2HN_SUPPORT
       if (strstr(hardware, "BananaPi BPI-AI2N") ||
-          strstr(hardware, "Banana Pi BPI-AI2N")) {
-          rzv2n_found = found = 1;
+          strstr(hardware, "Banana Pi BPI-AI2N") || 
+          strstr(hardware, "BananaPi BPI-AI2H") ||
+          strstr(hardware, "Banana Pi BPI-AI2H")) {
+          rzv2hn_found = found = 1;
       }
 #endif
    }
@@ -107,8 +109,8 @@ int get_rpi_info(rpi_info *info)
 #ifdef SPACEMIT_SUPPORT
 	     spacemit_found = 0;
 #endif
-#ifdef RZV2N_SUPPORT
-             rzv2n_found = 0;
+#ifdef RZV2HN_SUPPORT
+             rzv2hn_found = 0;
 #endif
         }
         else {  //Check for Bananapi 
@@ -142,9 +144,10 @@ int get_rpi_info(rpi_info *info)
                 spacemit_found = found = 1;
             }
 #endif
-#ifdef RZV2N_SUPPORT
-            if (strstr(hardware, "BPI-AI2N"))  {
-                rzv2n_found = found = 1;
+#ifdef RZV2HN_SUPPORT
+            if (strstr(hardware, "BPI-AI2N") ||
+	        strstr(hardware, "BPI-AI2H"))  {
+                rzv2hn_found = found = 1;
             }
 #endif
         }
@@ -186,9 +189,9 @@ int get_rpi_info(rpi_info *info)
       return 0;
    }
 #endif
-#ifdef RZV2N_SUPPORT
-   if (rzv2n_found) {
-      setInfoRzv2n(hardware, (void *)info);
+#ifdef RZV2HN_SUPPORT
+   if (rzv2hn_found) {
+      setInfoRzv2hn(hardware, (void *)info);
       strcpy(info->revision, revision);
       return 0;
    }
