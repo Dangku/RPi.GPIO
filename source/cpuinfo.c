@@ -152,7 +152,9 @@ int get_rpi_info(rpi_info *info)
 #endif
         }
 
-        sscanf(buffer, "Revision	: %s", revision);
+        if (sscanf(buffer, "Revision\t: %s", revision) != 1) {
+            strcpy(revision, "Unknown");
+        }
       }
    }
    else {
