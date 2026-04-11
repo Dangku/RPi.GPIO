@@ -37,7 +37,7 @@ int get_rpi_info(rpi_info *info)
    FILE *fp;
    char buffer[1024];
    char hardware[1024];
-   char revision[1024];
+   char revision[1024] = "";
    int found = 0;
    int len;
 
