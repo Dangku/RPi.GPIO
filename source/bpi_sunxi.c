@@ -47,7 +47,7 @@ int wiringPiSetupSun50iw9 (void)
     }
 
 
-    if (piModel == PI_MODEL_BANANAPIM4BERRY || piModel == PI_MODEL_BANANAPIM4ZERO) {
+    if (piModel == PI_MODEL_BANANAPIM4BERRY || piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
         sun50iw9_gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, SUN50IW9_GPIO_BASE);
         if (sun50iw9_gpio == MAP_FAILED)
             return wiringPiFailure(WPI_ALMOST, "wiringPiSetupSun50iw9: mmap (GPIO) failed: %s\n", strerror(errno));
@@ -82,7 +82,7 @@ void pinModeSun50iw9 (int pin, int mode)
     if (mode == INPUT)
     {
         if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
             *(sun50iw9_gpio + mmap_seek) &= ~(7 << offset);
         }
         else
@@ -91,7 +91,7 @@ void pinModeSun50iw9 (int pin, int mode)
     else if (mode == OUTPUT)
     {
         if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
             *(sun50iw9_gpio + mmap_seek) &= ~(7 << offset);
             *(sun50iw9_gpio + mmap_seek) |=  (1 << offset);
         }
@@ -135,7 +135,7 @@ void pullUpDnControlSun50iw9 (int pin, int pud)
     }
 
     if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
         *(sun50iw9_gpio + mmap_seek) &= ~(3 << offset);
         *(sun50iw9_gpio + mmap_seek) |= (bit_value & 3) << offset;
     }
@@ -158,7 +158,7 @@ int digitalReadSun50iw9 (int pin)
     mmap_seek = phyaddr >> 2;
 
     if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
         if (*(sun50iw9_gpio + mmap_seek) & (1 << index))
             retval = HIGH;
         else
@@ -186,7 +186,7 @@ void digitalWriteSun50iw9 (int pin, int value)
 
 
     if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
         if (value == LOW)
             *(sun50iw9_gpio + mmap_seek) &= ~(1 << index);
         else
@@ -237,7 +237,7 @@ int pinGetModeSun50iw9 (int pin)
     mmap_seek = phyaddr >> 2;
 
     if (piModel == PI_MODEL_BANANAPIM4BERRY||
-            piModel == PI_MODEL_BANANAPIM4ZERO) {
+            piModel == PI_MODEL_BANANAPIM4ZERO || piModel == PI_MODEL_BANANAPIM4ZERO_V1) {
             retval = (*(sun50iw9_gpio + mmap_seek) >> offset) & 7;
     }
     else
@@ -261,10 +261,20 @@ void setInfoSun50iw9(char *hardware, void *vinfo)
        info->processor = "AW SUN50IW9";
    }
    else if (strstr(hardware, "BPI-M4Zero") ||
-       strstr(hardware, "BananaPi M4 Zero"))
+       strstr(hardware, "BananaPi M4 Zero") ||
+       strstr(hardware, "BananaPi BPI-M4-Zero v2"))
    {
        piModel = PI_MODEL_BANANAPIM4ZERO;
        info->type = "BPI-M4Zero";
+       info->p1_revision = 3;
+       info->ram = "2048M/4096M";
+       info->manufacturer = "Bananapi";
+       info->processor = "AW SUN50IW9";
+   }
+   else if (strstr(hardware, "BananaPi BPI-M4-Zero"))
+   {
+       piModel = PI_MODEL_BANANAPIM4ZERO_V1;
+       info->type = "BPI-M4Zero V1";
        info->p1_revision = 3;
        info->ram = "2048M/4096M";
        info->manufacturer = "Bananapi";
@@ -287,6 +297,11 @@ void setMappingPtrsSun50iw9(void)
     {
         pin_to_gpio = (const int(*)[41]) & physToGpioBananapiM4Zero;
         bcm_to_sun50iw9gpio = &bcmToOGpioBananapiM4Zero;
+    }
+    else if (piModel == PI_MODEL_BANANAPIM4ZERO_V1)
+    {
+        pin_to_gpio = (const int(*)[41]) & physToGpioBananapiM4ZeroV1;
+        bcm_to_sun50iw9gpio = &bcmToOGpioBananapiM4ZeroV1;
     }
 }
 #endif /* end SUN50IW9_SUPPORT */

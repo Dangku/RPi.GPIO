@@ -25,6 +25,7 @@
 #define	PI_MODEL_BANANAPIF5                                      15
 #define	PI_MODEL_BANANAPIAI2N                                 16
 #define	PI_MODEL_BANANAPIAI2H                                 17
+#define	PI_MODEL_BANANAPIM4ZERO_V1                           18
 
 #define AML_SUPPORT
 #define SUN50IW9_SUPPORT
