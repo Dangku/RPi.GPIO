@@ -61,7 +61,8 @@ int get_rpi_info(rpi_info *info)
 #endif
 #ifdef SUN50IW9_SUPPORT
       if (strstr(hardware, "BananaPi M4 Berry") ||
-          strstr(hardware, "BananaPi M4 Zero"))  {
+          strstr(hardware, "BananaPi M4 Zero") ||
+          strstr(hardware, "BananaPi BPI-M4-Zero"))  {
           sun50iw9_found = found = 1;
       }
 #endif
